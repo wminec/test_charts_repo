@@ -58,7 +58,7 @@ spec:
         - name: OMAPM_APPLICATION_NAME
           value: openmaru-apm
         - name: OMAPM_SERVER_BRAND_NAME
-          value: {{ .Values.omApm.brandName }}
+          value: cocktail
 {{- if .Values.omApm.env }}
 {{ toYaml .Values.omApm.env | indent 8}}
 {{- end }}

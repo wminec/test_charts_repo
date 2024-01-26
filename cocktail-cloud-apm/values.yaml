@@ -57,9 +57,6 @@ omApm:
     ## The image tag to pull for the openmaru-apm image
     tag: 5.1.0-10.0.1
 
-  ## The Brand Name to use for openmaru-apm.
-  brandName: cocktail
-
   ## The additional environment variables to be set on the openmaru-apm pods.
   env: {}
   # - name: OMAPM_APDEX_THRESHOLD
@@ -119,7 +116,7 @@ omApm:
 
     ## The hosts to use for openmaru-apm ingress.
     hosts: 
-      - omapm.helm.om-apm.com
+      - cocktail-cloud-apm.cocktail.apm.com
 
     ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
     extraPaths: []

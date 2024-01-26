@@ -174,7 +174,6 @@
             "title": "The omApm Schema",
             "required": [
                 "image",
-                "brandName",
                 "env",
                 "nodeSelector",
                 "affinity",
@@ -214,14 +213,6 @@
                         "repository": "om-helm/openmaru-apm",
                         "tag": "5.1.0-10.0.1"
                     }]
-                },
-                "brandName": {
-                    "type": "string",
-                    "default": "",
-                    "title": "The brandName Schema",
-                    "examples": [
-                        "cocktail"
-                    ]
                 },
                 "env": {
                     "type": "object",
@@ -392,12 +383,12 @@
                                 "default": "",
                                 "title": "A Schema",
                                 "examples": [
-                                    "omapm.helm.om-apm.com"
+                                    "cocktail-cloud-apm.cocktail.apm.com"
                                 ]
                             },
                             "examples": [
                                 [
-                                    "omapm.helm.om-apm.com"]
+                                    "cocktail-cloud-apm.cocktail.apm.com"]
                             ]
                         },
                         "extraPaths": {
@@ -429,7 +420,7 @@
                         "path": "/",
                         "pathType": "Prefix",
                         "hosts": [
-                            "omapm.helm.om-apm.com"
+                            "cocktail-cloud-apm.cocktail.apm.com"
                         ],
                         "extraPaths": [],
                         "tls": []
@@ -441,7 +432,6 @@
                     "repository": "om-helm/openmaru-apm",
                     "tag": "5.1.0-10.0.1"
                 },
-                "brandName": "cocktail",
                 "env": {},
                 "nodeSelector": {},
                 "affinity": {},
@@ -462,7 +452,7 @@
                     "path": "/",
                     "pathType": "Prefix",
                     "hosts": [
-                        "omapm.helm.om-apm.com"
+                        "cocktail-cloud-apm.cocktail.apm.com"
                     ],
                     "extraPaths": [],
                     "tls": []
@@ -962,7 +952,6 @@
                 "repository": "om-helm/openmaru-apm",
                 "tag": "5.1.0-10.0.1"
             },
-            "brandName": "cocktail",
             "env": {},
             "nodeSelector": {},
             "affinity": {},
@@ -983,7 +972,7 @@
                 "path": "/",
                 "pathType": "Prefix",
                 "hosts": [
-                    "omapm.helm.om-apm.com"
+                    "cocktail-cloud-apm.cocktail.apm.com"
                 ],
                 "extraPaths": [],
                 "tls": []

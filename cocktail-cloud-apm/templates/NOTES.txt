@@ -1,6 +1,6 @@
-OPENMARU APM is installed.
-You can access the OPENMARU APM through the URI below.
+Cocktail Cloud APM is installed.
 {{- if .Values.omApm.ingress.enabled }}
+You can access the Cocktail Cloud APM through the URI below.
   {{- range .Values.omApm.ingress.hosts }}
   http://{{ . }}
   {{- end }}
