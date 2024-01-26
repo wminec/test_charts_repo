@@ -3,13 +3,13 @@ entries:
   openmaru-apm:
   - apiVersion: v2
     appVersion: 5.1.0-10.0.1
-    created: "2024-01-26T14:10:36.3354406+09:00"
+    created: "2024-01-26T14:56:50.058560894+09:00"
     description: A Helm chart for Kubernetes
-    digest: 2dcaea626e4709ff63d6df6ef2e417bb5d2a1bdd670f6aa4dd98650a72639720
-    icon: /cocktail-cloud-apm-width-logo-color.png
+    digest: 374e0805e42f8d0e7a795f22cafc6b0cf4bd71bd23772998a635f0633cc32091
+    icon: cocktail-cloud-apm-width-logo-color.png
     name: openmaru-apm
     type: application
     urls:
-    - https://registry.rnd.local/om-charts/openmaru-apm-0.1.0.tgz
+    - openmaru-apm-0.1.0.tgz
     version: 0.1.0
-generated: "2024-01-26T14:10:36.3277104+09:00"
+generated: "2024-01-26T14:56:50.054132855+09:00"
