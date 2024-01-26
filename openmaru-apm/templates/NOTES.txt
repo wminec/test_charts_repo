@@ -1,0 +1,7 @@
+OPENMARU APM is installed.
+You can access the OPENMARU APM through the URI below.
+{{- if .Values.omApm.ingress.enabled }}
+  {{- range .Values.omApm.ingress.hosts }}
+  http://{{ . }}
+  {{- end }}
+{{- end }}

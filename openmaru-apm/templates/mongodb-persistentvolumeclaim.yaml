@@ -1,0 +1,17 @@
+{{- if .Values.mongodb.pvc.create }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb
+  labels: {{- include "openmaru-apm.labels" . | nindent 4}}
+    app: mongodb
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+  - {{ .Values.mongodb.pvc.accessModes | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.mongodb.pvc.size | quote }}
+  storageClassName: {{ .Values.mongodb.pvc.storageClassName | quote }}
+  volumeMode: Filesystem
+{{- end }}

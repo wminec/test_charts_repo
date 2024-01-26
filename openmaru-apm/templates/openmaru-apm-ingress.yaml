@@ -1,0 +1,78 @@
+{{- if .Values.omApm.ingress.enabled -}}
+{{- $ingressApiIsStable := eq (include "openmaru-apm.ingress.isStable" .) "true" -}}
+{{- $ingressSupportsIngressClassName := eq (include "openmaru-apm.ingress.supportsIngressClassName" .) "true" -}}
+{{- $ingressSupportsPathType := eq (include "openmaru-apm.ingress.supportsPathType" .) "true" -}}
+#{{- $fullName := include "openmaru-apm.fullname" . -}}
+{{- $servicePort := .Values.omApm.service.port -}}
+{{- $ingressPath := .Values.omApm.ingress.path -}}
+{{- $ingressPathType := .Values.omApm.ingress.pathType -}}
+{{- $extraPaths := .Values.omApm.ingress.extraPaths -}}
+
+
+#{{ printf "%#v" (include "openmaru-apm.ingress.apiVersion" .) }}
+apiVersion: {{ include "openmaru-apm.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: openmaru-apm
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "openmaru-apm.labels" . | nindent 4}}
+  {{- with .Values.omApm.ingress.annotations }}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ tpl $value $ | quote }}
+    {{- end }}
+  {{- end }}
+spec:
+  {{- if and $ingressSupportsIngressClassName .Values.omApm.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.omApm.ingress.ingressClassName }}
+  {{- end -}}
+  {{- with .Values.omApm.ingress.tls }}
+  tls:
+    {{- tpl (toYaml .) $ | nindent 4 }}
+  {{- end }}
+  rules:
+  {{- if .Values.omApm.ingress.hosts  }}
+  {{- range .Values.omApm.ingress.hosts }}
+    - host: {{ tpl . $ }}
+      http:
+        paths:
+          {{- with $extraPaths }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          - path: {{ $ingressPath }}
+            {{- if $ingressSupportsPathType }}
+            pathType: {{ $ingressPathType }}
+            {{- end }}
+            backend:
+              {{- if $ingressApiIsStable }}
+              service:
+                name: openmaru-apm
+                port:
+                  number: {{ $servicePort }}
+              {{- else }}
+              serviceName: openmaru-apm
+              servicePort: {{ $servicePort }}
+              {{- end }}
+  {{- end }}
+  {{- else }}
+    - http:
+        paths:
+          - backend:
+              {{- if $ingressApiIsStable }}
+              service:
+                name: openmaru-apm
+                port:
+                  number: {{ $servicePort }}
+              {{- else }}
+              serviceName: openmaru-apm
+              servicePort: {{ $servicePort }}
+              {{- end }}
+            {{- with $ingressPath }}
+            path: {{ . }}
+            {{- end }}
+            {{- if $ingressSupportsPathType }}
+            pathType: {{ $ingressPathType }}
+            {{- end }}
+  {{- end -}}
+{{- end }}

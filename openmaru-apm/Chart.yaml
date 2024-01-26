@@ -1,0 +1,7 @@
+apiVersion: v2
+appVersion: 5.1.0-10.0.1
+description: A Helm chart for Kubernetes
+icon: /cocktail-cloud-apm-width-logo-color.png
+name: openmaru-apm
+type: application
+version: 0.1.0

@@ -1,0 +1,17 @@
+{{- if .Values.influxdb.pvc.create }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb
+  labels: {{- include "openmaru-apm.labels" . | nindent 4}}
+    app: influxdb
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+  - {{ .Values.influxdb.pvc.accessModes | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.influxdb.pvc.size | quote }}
+  storageClassName: {{ .Values.influxdb.pvc.storageClassName | quote}}
+  volumeMode: Filesystem
+{{- end }}

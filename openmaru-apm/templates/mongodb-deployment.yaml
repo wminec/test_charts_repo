@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: {{- include "openmaru-apm.labels" . | nindent 4}}
+    app: mongodb
+  name: mongodb
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels: {{- include "openmaru-apm.labels" . | nindent 8}}
+        app: mongodb
+    spec:
+{{- if .Values.global.imagePullSecret.enable }}
+      imagePullSecrets: 
+      - name: {{ .Values.global.imagePullSecret.name }}
+{{- end }}
+{{- if .Values.mongodb.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.mongodb.nodeSelector | indent 8 }}
+{{- end }}
+{{- if .Values.mongodb.affinity }}
+      affinity:
+{{ toYaml .Values.mongodb.affinity | indent 8 }}
+{{- end }}
+{{- if .Values.mongodb.tolerations }}
+      tolerations:
+{{ toYaml .Values.mongodb.tolerations | indent 8 }}
+{{- end }}
+      containers:
+      - args:
+        - --wiredTigerCollectionBlockCompressor=zlib
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: khan
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: opennaru12#$
+        - name: TZ
+          value: {{ .Values.global.timezone }}
+        image: {{ include "openmaru-apm.mongodb.image" . }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy}}
+        livenessProbe:
+          exec:
+            command:
+            - mongosh
+            - -eval
+            - db.adminCommand('ping')
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: openmaru-mongodb
+        ports:
+        - containerPort: 27017
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - mongosh
+            - --eval
+            - db.adminCommand('ping')
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+{{ toYaml .Values.mongodb.resources | indent 10 }}
+{{- if .Values.mongodb.pvc.create }}
+        volumeMounts:
+        - mountPath: /data/db
+          name: mongodb
+{{- end }}
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+{{- if .Values.mongodb.pvc.create }}
+      volumes:
+      - name: mongodb
+        persistentVolumeClaim:
+          claimName: mongodb
+{{- end }}

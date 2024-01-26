@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels: {{- include "openmaru-apm.labels" . | nindent 4}}
+    project: {{ .Release.Namespace }}
+    app: rabbitmq
+  name: rabbitmq
+  namespace: {{ .Release.Namespace }}
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: rabbitmq
+    port: 5672
+    protocol: TCP
+    targetPort: 5672
+  - name: rabbitmq2
+    port: 15672
+    protocol: TCP
+    targetPort: 15672
+  selector:
+    app: rabbitmq
+  sessionAffinity: None
+  type: ClusterIP

@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb
+  labels: {{- include "openmaru-apm.labels" . | nindent 4}}
+    app: influxdb
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels: {{- include "openmaru-apm.labels" . | nindent 8}}
+        app: influxdb
+    spec:
+{{- if .Values.global.imagePullSecret.enable }}
+      imagePullSecrets: 
+      - name: {{ .Values.global.imagePullSecret.name }}
+{{- end }}
+{{- if .Values.influxdb.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.influxdb.nodeSelector | indent 8 }}
+{{- end }}
+{{- if .Values.influxdb.affinity }}
+      affinity:
+{{ toYaml .Values.influxdb.affinity | indent 8 }}
+{{- end }}
+{{- if .Values.influxdb.tolerations }}
+      tolerations:
+{{ toYaml .Values.influxdb.tolerations | indent 8 }}
+{{- end }}
+      containers:
+      - env:
+        - name: DOCKER_INFLUXDB_INIT_MODE
+          value: setup
+        - name: DOCKER_INFLUXDB_INIT_USERNAME
+          value: khan
+        - name: DOCKER_INFLUXDB_INIT_ORG
+          value: openmaru
+        - name: DOCKER_INFLUXDB_INIT_BUCKET
+          value: KHAN
+        - name: DOCKER_INFLUXDB_INIT_RETENTION
+          value: 100d
+        - name: DOCKER_INFLUXDB_INIT_PASSWORD
+          value: opennaru12#$
+        - name: DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+          value: opennaru12#$
+        - name: TZ
+          value: {{ .Values.global.timezone }}
+        image: {{ include "openmaru-apm.influxdb.image" . }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /ping
+            port: 8086
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: openmaru-influxdb
+        ports:
+        - containerPort: 8086
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /ping
+            port: 8086
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources: 
+{{ toYaml .Values.influxdb.resources | indent 10 }}
+{{- if .Values.influxdb.pvc.create }}
+        volumeMounts:
+        - mountPath: /var/lib/influxdb2
+          name: influxdb
+{{- end }}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+{{- if .Values.influxdb.pvc.create }}
+      volumes:
+      - name: influxdb
+        persistentVolumeClaim:
+          claimName: influxdb
+{{- end }}

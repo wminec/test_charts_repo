@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  {{- with .Values.omApm.service.annotations }}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ tpl $value $ | quote }}
+    {{- end }}
+  {{- end }}
+  labels: {{- include "openmaru-apm.labels" . | nindent 4}}
+    app: openmaru-apm
+    project: {{ .Release.Namespace }}
+  name: openmaru-apm
+  namespace: {{ .Release.Namespace }}
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: openmaru-apm
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: openmaru-apm
+  type: {{ .Values.omApm.service.type}}

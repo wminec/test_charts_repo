@@ -1,0 +1,249 @@
+# Default values for openmaru-apm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  ## Overrides the chart's name
+  nameOverride: ""
+
+  ## Overrides the chart's computed fullname
+  fullnameOverride: ""
+  
+##  serviceAccount:
+##    # Specifies whether a service account should be created
+##    create: false
+##    # Automatically mount a ServiceAccount's API credentials?
+##    automount: true
+##    # Annotations to add to the service account
+##    annotations: {}
+##    # The name of the service account to use.
+##    # If not set and create is true, a name is generated using the fullname template
+##    name: ""
+
+
+  ## The Image registry to pull from in all pods.
+  imageRegistry: registry.rnd.local
+
+  ## The Pull Policy to use for images in all pods.
+  imagePullPolicy: IfNotPresent
+
+  ## The ImagePullSecrets to use for all pods.
+  imagePullSecret:
+    ## Specifies whether a imagePullSecret should be set.
+    enable: false
+    ## The name of the kubernetes secret to pull from the image registry.
+    name: regcred
+    ## if true, kubernetes secret will be created with below registryCredentials.
+    create: false
+
+  ## The following configuration is used only when global.imagePullSecret.create is set to true.
+  ## Credentials for image registry to pull from.
+  registryCredentials:
+    ## username for image registry to pull from.
+    username: ""
+    ## password for image registry to pull from.
+    password: ""
+    ## email for image registry to pull from.
+    email: ""
+
+  ## Timezone to use for all pods.
+  timezone: Asia/Seoul
+
+omApm:
+  image:
+    ## The image repository to pull from for the openmaru-apm image
+    repository: om-helm/openmaru-apm
+
+    ## The image tag to pull for the openmaru-apm image
+    tag: 5.1.0-10.0.1
+
+  ## The Brand Name to use for openmaru-apm.
+  brandName: cocktail
+
+  ## The additional environment variables to be set on the openmaru-apm pods.
+  env: {}
+  # - name: OMAPM_APDEX_THRESHOLD
+  #   value: "3.0"
+  # - name: OMAPM_TRANSACTION_TRACE_THRESHOLD
+  #   value: 500
+
+  ## The node selector to use for openmaru-apm pods.
+  nodeSelector: {}
+
+  ## The affinity to use for openmaru-apm pods.
+  affinity: {}
+
+  ## The Tolerations to use for openmaru-apm pods.
+  tolerations: []
+
+  ## The Resources to be allocated for openmaru-apm pods.
+  resources: {}
+
+  ## Definiton of the openmaru-apm service object.
+  service:
+    ## The Annotations to be added to the openmaru-apm service object.
+    annotations: {}
+
+    ## The type of service to create for openmaru-apm.
+    type: ClusterIP
+
+    ## The port to expose on the service.
+    port: 8080
+
+
+  ## ingress configuration for openmaru-apm
+  ## websocket is required for the openmaru-apm agents to work properly.
+  ingress:
+    ## Create an ingress resource for openmaru-apm.
+    enabled: true
+
+    ## The ingress class to use for openmaru-apm.
+    ## For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
+    ## See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
+    ingressClassName: nginx
+
+    ## Annotations to be added to the ingress.
+    ## websocket is required for the openmaru-apm agents to work properly.
+    annotations: 
+      ingress.kubernetes.io/rewrite-target: /
+      nginx.org/websocket-services: openmaru-apm
+      #ingress.kubernetes.io/ssl-redirect: "true"
+
+      
+    
+    ## The path of openmaru-apm Application context.
+    path: /
+
+    ## pathType is only for k8s >= 1.1=
+    pathType: Prefix
+
+    ## The hosts to use for openmaru-apm ingress.
+    hosts: 
+      - omapm.helm.om-apm.com
+
+    ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
+    extraPaths: []
+    # - path: /*
+    #   backend:
+    #     serviceName: ssl-redirect
+    #     servicePort: use-annotation
+    ## Or for k8s > 1.19
+    # - path: /*
+    #   pathType: Prefix
+    #   backend:
+    #     service:
+    #       name: ssl-redirect
+    #       port:
+    #         name: use-annotation
+
+    ## TLS configuration for openmaru-apm ingress.
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+
+influxdb:
+  image:
+    ## The image repository to pull from for the influxdb image
+    repository: om-helm/influxdb
+
+    ## The image tag to pull for the influxdb image
+    tag: 2.7.3-openmaru-security
+
+  ## Node Selector to use for influxdb pods
+  nodeSelector: {}
+
+  ## The affinity to use for influxdb pods
+  affinity: {}
+
+  ## The tolerations to use for influxdb pods
+  tolerations: []
+
+  ## The Resources to be allocated for influxdb pods
+  resources: {}
+
+  pvc:
+    ## Create influxdb PVC
+    create: true
+
+    ## The access mode of the influxdb PVC
+    accessModes: ReadWriteOnce
+
+    ## The size of the influxdb PVC
+    size: 10Gi
+
+    ## The storage class to use for the influxdb PVC
+    storageClassName: nfs-client
+
+mongodb:
+  image:
+    ## The image repository to pull from for the mongodb image
+    repository: om-helm/mongo
+
+    ## The image tag to pull for the mongodb image
+    tag: 7.0.2-openmaru-security
+
+  ## Node Selector to use for mongodb pods
+  nodeSelector: {}
+
+  ## The affinity to use for mongodb pods
+  affinity: {}
+
+  ## The tolerations to use for mongodb pods
+  tolerations: []
+
+  ## The Resources to be allocated for mongodb pods
+  resources: {}
+
+  pvc:
+    ## Create mongodb PVC
+    create: true
+
+    ## The access mode of the mongodb PVC
+    accessModes: ReadWriteOnce
+
+    ## The size of the mongodb PVC
+    size: 10Gi
+
+    ## The storage class to use for the mongodb PVC
+    storageClassName: nfs-client
+
+rabbitmq:
+  image:
+    ## The image repository to pull from for the rabbitmq image
+    repository: om-helm/rabbitmq
+
+    ## The image tag to pull for the rabbitmq image
+    tag: 3.12.7-management-openmaru-security
+
+  ## The nodeSelector to use for rabbitmq pods
+  nodeSelector: {}
+
+  ## The affinity to use for rabbitmq pods
+  affinity: {}
+
+  ## The tolerations to use for rabbitmq pods
+  tolerations: []
+
+  ## The Resources to be allocated for rabbitmq pods
+  resources: {}
+
+redis:
+  image:
+    ## The image repository to pull from for the redis image
+    repository: om-helm/redis
+
+    ## The image tag to pull for the redis image
+    tag: 7.0.14-openmaru-security
+
+  ## The nodeSelector to use for redis pods
+  nodeSelector: {}
+
+  ## The affinity to use for redis pods
+  affinity: []
+
+  ## The tolerations to use for redis pods
+  tolerations: []
+
+  ## The Resources to be allocated for redis pods
+  resources: {}

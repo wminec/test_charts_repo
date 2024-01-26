@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: {{- include "openmaru-apm.labels" . | nindent 4}}
+    app: rabbitmq
+  name: rabbitmq
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels: {{- include "openmaru-apm.labels" . | nindent 8}}
+        app: rabbitmq
+    spec:
+{{- if .Values.global.imagePullSecret.enable }}
+      imagePullSecrets: 
+      - name: {{ .Values.global.imagePullSecret.name }}
+{{- end }}
+{{- if .Values.rabbitmq.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.rabbitmq.nodeSelector | indent 8 }}
+{{- end }}
+{{- if .Values.rabbitmq.affinity }}
+      affinity:
+{{ toYaml .Values.rabbitmq.affinity | indent 8 }}
+{{- end }}
+{{- if .Values.rabbitmq.tolerations }}
+      tolerations:
+{{ toYaml .Values.rabbitmq.tolerations | indent 8 }}
+{{- end }}
+      containers:
+      - env:
+        - name: TZ
+          value: {{ .Values.global.timezone }}
+        - name: RABBITMQ_DEFAULT_USER
+          value: khan
+        - name: RABBITMQ_DEFAULT_PASS
+          value: opennaru12#$
+        image: {{ include "openmaru-apm.rabbitmq.image" . }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            httpHeaders:
+            - name: Authorization
+              value: Basic a2hhbjpvcGVubmFydTEyIyQ=
+            path: /api/healthchecks/node
+            port: 15672
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: openmaru-rabbitmq
+        ports:
+        - containerPort: 5672
+          protocol: TCP
+        - containerPort: 15672
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            httpHeaders:
+            - name: Authorization
+              value: Basic a2hhbjpvcGVubmFydTEyIyQ=
+            path: /api/healthchecks/node
+            port: 15672
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources: 
+{{ toYaml .Values.rabbitmq.resources | indent 10 }}
+      restartPolicy: Always
+      securityContext: {}

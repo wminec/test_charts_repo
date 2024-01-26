@@ -1,0 +1,1045 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "global",
+        "omApm",
+        "influxdb",
+        "mongodb",
+        "rabbitmq",
+        "redis"
+    ],
+    "properties": {
+        "global": {
+            "type": "object",
+            "default": {},
+            "title": "The global Schema",
+            "required": [
+                "nameOverride",
+                "fullnameOverride",
+                "imageRegistry",
+                "imagePullPolicy",
+                "imagePullSecret",
+                "registryCredentials",
+                "timezone"
+            ],
+            "properties": {
+                "nameOverride": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The nameOverride Schema",
+                    "examples": [
+                        ""
+                    ]
+                },
+                "fullnameOverride": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The fullnameOverride Schema",
+                    "examples": [
+                        ""
+                    ]
+                },
+                "imageRegistry": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The imageRegistry Schema",
+                    "examples": [
+                        "registry.rnd.local"
+                    ]
+                },
+                "imagePullPolicy": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The imagePullPolicy Schema",
+                    "examples": [
+                        "IfNotPresent"
+                    ]
+                },
+                "imagePullSecret": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The imagePullSecret Schema",
+                    "required": [
+                        "enable",
+                        "name",
+                        "create"
+                    ],
+                    "properties": {
+                        "enable": {
+                            "type": "boolean",
+                            "default": false,
+                            "title": "The enable Schema",
+                            "examples": [
+                                false
+                            ]
+                        },
+                        "name": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The name Schema",
+                            "examples": [
+                                "regcred"
+                            ]
+                        },
+                        "create": {
+                            "type": "boolean",
+                            "default": false,
+                            "title": "The create Schema",
+                            "examples": [
+                                false
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "enable": false,
+                        "name": "regcred",
+                        "create": false
+                    }]
+                },
+                "registryCredentials": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The registryCredentials Schema",
+                    "required": [
+                        "username",
+                        "password",
+                        "email"
+                    ],
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The username Schema",
+                            "examples": [
+                                ""
+                            ]
+                        },
+                        "password": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The password Schema",
+                            "examples": [
+                                ""
+                            ]
+                        },
+                        "email": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The email Schema",
+                            "examples": [
+                                ""
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "username": "",
+                        "password": "",
+                        "email": ""
+                    }]
+                },
+                "timezone": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The timezone Schema",
+                    "examples": [
+                        "Asia/Seoul"
+                    ]
+                }
+            },
+            "examples": [{
+                "nameOverride": "",
+                "fullnameOverride": "",
+                "imageRegistry": "registry.rnd.local",
+                "imagePullPolicy": "IfNotPresent",
+                "imagePullSecret": {
+                    "enable": false,
+                    "name": "regcred",
+                    "create": false
+                },
+                "registryCredentials": {
+                    "username": "",
+                    "password": "",
+                    "email": ""
+                },
+                "timezone": "Asia/Seoul"
+            }]
+        },
+        "omApm": {
+            "type": "object",
+            "default": {},
+            "title": "The omApm Schema",
+            "required": [
+                "image",
+                "brandName",
+                "env",
+                "nodeSelector",
+                "affinity",
+                "tolerations",
+                "resources",
+                "service",
+                "ingress"
+            ],
+            "properties": {
+                "image": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The image Schema",
+                    "required": [
+                        "repository",
+                        "tag"
+                    ],
+                    "properties": {
+                        "repository": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The repository Schema",
+                            "examples": [
+                                "om-helm/openmaru-apm"
+                            ]
+                        },
+                        "tag": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The tag Schema",
+                            "examples": [
+                                "5.1.0-10.0.1"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "repository": "om-helm/openmaru-apm",
+                        "tag": "5.1.0-10.0.1"
+                    }]
+                },
+                "brandName": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The brandName Schema",
+                    "examples": [
+                        "cocktail"
+                    ]
+                },
+                "env": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The env Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The nodeSelector Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                },
+                "affinity": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The affinity Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                },
+                "tolerations": {
+                    "type": "array",
+                    "default": [],
+                    "title": "The tolerations Schema",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "resources": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The resources Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                },
+                "service": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The service Schema",
+                    "required": [
+                        "annotations",
+                        "type",
+                        "port"
+                    ],
+                    "properties": {
+                        "annotations": {
+                            "type": "object",
+                            "default": {},
+                            "title": "The annotations Schema",
+                            "required": [],
+                            "properties": {},
+                            "examples": [{}]
+                        },
+                        "type": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The type Schema",
+                            "examples": [
+                                "ClusterIP"
+                            ]
+                        },
+                        "port": {
+                            "type": "integer",
+                            "default": 0,
+                            "title": "The port Schema",
+                            "examples": [
+                                8080
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "annotations": {},
+                        "type": "ClusterIP",
+                        "port": 8080
+                    }]
+                },
+                "ingress": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The ingress Schema",
+                    "required": [
+                        "enabled",
+                        "ingressClassName",
+                        "annotations",
+                        "path",
+                        "pathType",
+                        "hosts",
+                        "extraPaths",
+                        "tls"
+                    ],
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "default": false,
+                            "title": "The enabled Schema",
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "ingressClassName": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The ingressClassName Schema",
+                            "examples": [
+                                "nginx"
+                            ]
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "default": {},
+                            "title": "The annotations Schema",
+                            "required": [
+                                "ingress.kubernetes.io/rewrite-target",
+                                "nginx.org/websocket-services"
+                            ],
+                            "properties": {
+                                "ingress.kubernetes.io/rewrite-target": {
+                                    "type": "string",
+                                    "default": "",
+                                    "title": "The ingress.kubernetes.io/rewrite-target Schema",
+                                    "examples": [
+                                        "/"
+                                    ]
+                                },
+                                "nginx.org/websocket-services": {
+                                    "type": "string",
+                                    "default": "",
+                                    "title": "The nginx.org/websocket-services Schema",
+                                    "examples": [
+                                        "openmaru-apm"
+                                    ]
+                                }
+                            },
+                            "examples": [{
+                                "ingress.kubernetes.io/rewrite-target": "/",
+                                "nginx.org/websocket-services": "openmaru-apm"
+                            }]
+                        },
+                        "path": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The path Schema",
+                            "examples": [
+                                "/"
+                            ]
+                        },
+                        "pathType": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The pathType Schema",
+                            "examples": [
+                                "Prefix"
+                            ]
+                        },
+                        "hosts": {
+                            "type": "array",
+                            "default": [],
+                            "title": "The hosts Schema",
+                            "items": {
+                                "type": "string",
+                                "default": "",
+                                "title": "A Schema",
+                                "examples": [
+                                    "omapm.helm.om-apm.com"
+                                ]
+                            },
+                            "examples": [
+                                [
+                                    "omapm.helm.om-apm.com"]
+                            ]
+                        },
+                        "extraPaths": {
+                            "type": "array",
+                            "default": [],
+                            "title": "The extraPaths Schema",
+                            "items": {},
+                            "examples": [
+                                []
+                            ]
+                        },
+                        "tls": {
+                            "type": "array",
+                            "default": [],
+                            "title": "The tls Schema",
+                            "items": {},
+                            "examples": [
+                                []
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "enabled": true,
+                        "ingressClassName": "nginx",
+                        "annotations": {
+                            "ingress.kubernetes.io/rewrite-target": "/",
+                            "nginx.org/websocket-services": "openmaru-apm"
+                        },
+                        "path": "/",
+                        "pathType": "Prefix",
+                        "hosts": [
+                            "omapm.helm.om-apm.com"
+                        ],
+                        "extraPaths": [],
+                        "tls": []
+                    }]
+                }
+            },
+            "examples": [{
+                "image": {
+                    "repository": "om-helm/openmaru-apm",
+                    "tag": "5.1.0-10.0.1"
+                },
+                "brandName": "cocktail",
+                "env": {},
+                "nodeSelector": {},
+                "affinity": {},
+                "tolerations": [],
+                "resources": {},
+                "service": {
+                    "annotations": {},
+                    "type": "ClusterIP",
+                    "port": 8080
+                },
+                "ingress": {
+                    "enabled": true,
+                    "ingressClassName": "nginx",
+                    "annotations": {
+                        "ingress.kubernetes.io/rewrite-target": "/",
+                        "nginx.org/websocket-services": "openmaru-apm"
+                    },
+                    "path": "/",
+                    "pathType": "Prefix",
+                    "hosts": [
+                        "omapm.helm.om-apm.com"
+                    ],
+                    "extraPaths": [],
+                    "tls": []
+                }
+            }]
+        },
+        "influxdb": {
+            "type": "object",
+            "default": {},
+            "title": "The influxdb Schema",
+            "required": [
+                "image",
+                "nodeSelector",
+                "affinity",
+                "tolerations",
+                "resources",
+                "pvc"
+            ],
+            "properties": {
+                "image": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The image Schema",
+                    "required": [
+                        "repository",
+                        "tag"
+                    ],
+                    "properties": {
+                        "repository": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The repository Schema",
+                            "examples": [
+                                "om-helm/influxdb"
+                            ]
+                        },
+                        "tag": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The tag Schema",
+                            "examples": [
+                                "2.7.3-openmaru-security"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "repository": "om-helm/influxdb",
+                        "tag": "2.7.3-openmaru-security"
+                    }]
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The nodeSelector Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                },
+                "affinity": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The affinity Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                },
+                "tolerations": {
+                    "type": "array",
+                    "default": [],
+                    "title": "The tolerations Schema",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "resources": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The resources Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                },
+                "pvc": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The pvc Schema",
+                    "required": [
+                        "create",
+                        "accessModes",
+                        "size",
+                        "storageClassName"
+                    ],
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "default": false,
+                            "title": "The create Schema",
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "accessModes": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The accessModes Schema",
+                            "examples": [
+                                "ReadWriteOnce"
+                            ]
+                        },
+                        "size": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The size Schema",
+                            "examples": [
+                                "10Gi"
+                            ]
+                        },
+                        "storageClassName": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The storageClassName Schema",
+                            "examples": [
+                                "nfs-client"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "create": true,
+                        "accessModes": "ReadWriteOnce",
+                        "size": "10Gi",
+                        "storageClassName": "nfs-client"
+                    }]
+                }
+            },
+            "examples": [{
+                "image": {
+                    "repository": "om-helm/influxdb",
+                    "tag": "2.7.3-openmaru-security"
+                },
+                "nodeSelector": {},
+                "affinity": {},
+                "tolerations": [],
+                "resources": {},
+                "pvc": {
+                    "create": true,
+                    "accessModes": "ReadWriteOnce",
+                    "size": "10Gi",
+                    "storageClassName": "nfs-client"
+                }
+            }]
+        },
+        "mongodb": {
+            "type": "object",
+            "default": {},
+            "title": "The mongodb Schema",
+            "required": [
+                "image",
+                "nodeSelector",
+                "affinity",
+                "tolerations",
+                "resources",
+                "pvc"
+            ],
+            "properties": {
+                "image": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The image Schema",
+                    "required": [
+                        "repository",
+                        "tag"
+                    ],
+                    "properties": {
+                        "repository": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The repository Schema",
+                            "examples": [
+                                "om-helm/mongo"
+                            ]
+                        },
+                        "tag": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The tag Schema",
+                            "examples": [
+                                "7.0.2-openmaru-security"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "repository": "om-helm/mongo",
+                        "tag": "7.0.2-openmaru-security"
+                    }]
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The nodeSelector Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                },
+                "affinity": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The affinity Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                },
+                "tolerations": {
+                    "type": "array",
+                    "default": [],
+                    "title": "The tolerations Schema",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "resources": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The resources Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                },
+                "pvc": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The pvc Schema",
+                    "required": [
+                        "create",
+                        "accessModes",
+                        "size",
+                        "storageClassName"
+                    ],
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "default": false,
+                            "title": "The create Schema",
+                            "examples": [
+                                true
+                            ]
+                        },
+                        "accessModes": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The accessModes Schema",
+                            "examples": [
+                                "ReadWriteOnce"
+                            ]
+                        },
+                        "size": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The size Schema",
+                            "examples": [
+                                "10Gi"
+                            ]
+                        },
+                        "storageClassName": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The storageClassName Schema",
+                            "examples": [
+                                "nfs-client"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "create": true,
+                        "accessModes": "ReadWriteOnce",
+                        "size": "10Gi",
+                        "storageClassName": "nfs-client"
+                    }]
+                }
+            },
+            "examples": [{
+                "image": {
+                    "repository": "om-helm/mongo",
+                    "tag": "7.0.2-openmaru-security"
+                },
+                "nodeSelector": {},
+                "affinity": {},
+                "tolerations": [],
+                "resources": {},
+                "pvc": {
+                    "create": true,
+                    "accessModes": "ReadWriteOnce",
+                    "size": "10Gi",
+                    "storageClassName": "nfs-client"
+                }
+            }]
+        },
+        "rabbitmq": {
+            "type": "object",
+            "default": {},
+            "title": "The rabbitmq Schema",
+            "required": [
+                "image",
+                "nodeSelector",
+                "affinity",
+                "tolerations",
+                "resources"
+            ],
+            "properties": {
+                "image": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The image Schema",
+                    "required": [
+                        "repository",
+                        "tag"
+                    ],
+                    "properties": {
+                        "repository": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The repository Schema",
+                            "examples": [
+                                "om-helm/rabbitmq"
+                            ]
+                        },
+                        "tag": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The tag Schema",
+                            "examples": [
+                                "3.12.7-management-openmaru-security"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "repository": "om-helm/rabbitmq",
+                        "tag": "3.12.7-management-openmaru-security"
+                    }]
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The nodeSelector Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                },
+                "affinity": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The affinity Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                },
+                "tolerations": {
+                    "type": "array",
+                    "default": [],
+                    "title": "The tolerations Schema",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "resources": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The resources Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                }
+            },
+            "examples": [{
+                "image": {
+                    "repository": "om-helm/rabbitmq",
+                    "tag": "3.12.7-management-openmaru-security"
+                },
+                "nodeSelector": {},
+                "affinity": {},
+                "tolerations": [],
+                "resources": {}
+            }]
+        },
+        "redis": {
+            "type": "object",
+            "default": {},
+            "title": "The redis Schema",
+            "required": [
+                "image",
+                "nodeSelector",
+                "affinity",
+                "tolerations",
+                "resources"
+            ],
+            "properties": {
+                "image": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The image Schema",
+                    "required": [
+                        "repository",
+                        "tag"
+                    ],
+                    "properties": {
+                        "repository": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The repository Schema",
+                            "examples": [
+                                "om-helm/redis"
+                            ]
+                        },
+                        "tag": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The tag Schema",
+                            "examples": [
+                                "7.0.14-openmaru-security"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "repository": "om-helm/redis",
+                        "tag": "7.0.14-openmaru-security"
+                    }]
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The nodeSelector Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                },
+                "affinity": {
+                    "type": "array",
+                    "default": [],
+                    "title": "The affinity Schema",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "tolerations": {
+                    "type": "array",
+                    "default": [],
+                    "title": "The tolerations Schema",
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
+                },
+                "resources": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The resources Schema",
+                    "required": [],
+                    "properties": {},
+                    "examples": [{}]
+                }
+            },
+            "examples": [{
+                "image": {
+                    "repository": "om-helm/redis",
+                    "tag": "7.0.14-openmaru-security"
+                },
+                "nodeSelector": {},
+                "affinity": [],
+                "tolerations": [],
+                "resources": {}
+            }]
+        }
+    },
+    "examples": [{
+        "global": {
+            "nameOverride": "",
+            "fullnameOverride": "",
+            "imageRegistry": "registry.rnd.local",
+            "imagePullPolicy": "IfNotPresent",
+            "imagePullSecret": {
+                "enable": false,
+                "name": "regcred",
+                "create": false
+            },
+            "registryCredentials": {
+                "username": "",
+                "password": "",
+                "email": ""
+            },
+            "timezone": "Asia/Seoul"
+        },
+        "omApm": {
+            "image": {
+                "repository": "om-helm/openmaru-apm",
+                "tag": "5.1.0-10.0.1"
+            },
+            "brandName": "cocktail",
+            "env": {},
+            "nodeSelector": {},
+            "affinity": {},
+            "tolerations": [],
+            "resources": {},
+            "service": {
+                "annotations": {},
+                "type": "ClusterIP",
+                "port": 8080
+            },
+            "ingress": {
+                "enabled": true,
+                "ingressClassName": "nginx",
+                "annotations": {
+                    "ingress.kubernetes.io/rewrite-target": "/",
+                    "nginx.org/websocket-services": "openmaru-apm"
+                },
+                "path": "/",
+                "pathType": "Prefix",
+                "hosts": [
+                    "omapm.helm.om-apm.com"
+                ],
+                "extraPaths": [],
+                "tls": []
+            }
+        },
+        "influxdb": {
+            "image": {
+                "repository": "om-helm/influxdb",
+                "tag": "2.7.3-openmaru-security"
+            },
+            "nodeSelector": {},
+            "affinity": {},
+            "tolerations": [],
+            "resources": {},
+            "pvc": {
+                "create": true,
+                "accessModes": "ReadWriteOnce",
+                "size": "10Gi",
+                "storageClassName": "nfs-client"
+            }
+        },
+        "mongodb": {
+            "image": {
+                "repository": "om-helm/mongo",
+                "tag": "7.0.2-openmaru-security"
+            },
+            "nodeSelector": {},
+            "affinity": {},
+            "tolerations": [],
+            "resources": {},
+            "pvc": {
+                "create": true,
+                "accessModes": "ReadWriteOnce",
+                "size": "10Gi",
+                "storageClassName": "nfs-client"
+            }
+        },
+        "rabbitmq": {
+            "image": {
+                "repository": "om-helm/rabbitmq",
+                "tag": "3.12.7-management-openmaru-security"
+            },
+            "nodeSelector": {},
+            "affinity": {},
+            "tolerations": [],
+            "resources": {}
+        },
+        "redis": {
+            "image": {
+                "repository": "om-helm/redis",
+                "tag": "7.0.14-openmaru-security"
+            },
+            "nodeSelector": {},
+            "affinity": [],
+            "tolerations": [],
+            "resources": {}
+        }
+    }]
+}

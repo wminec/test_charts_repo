@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: {{- include "openmaru-apm.labels" . | nindent 4}}
+    app: openmaru-apm
+  name: openmaru-apm
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openmaru-apm
+  template:
+    metadata:
+      labels: {{- include "openmaru-apm.labels" . | nindent 8}}
+        app: openmaru-apm
+    spec:
+{{- if .Values.global.imagePullSecret.enable }}
+      imagePullSecrets: 
+      - name: {{ .Values.global.imagePullSecret.name }}
+{{- end }}
+{{- if .Values.omApm.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.omApm.nodeSelector | indent 8 }}
+{{- end }}
+{{- if .Values.omApm.affinity }}
+      affinity:
+{{ toYaml .Values.omApm.affinity | indent 8 }}
+{{- end }}
+{{- if .Values.omApm.tolerations }}
+      tolerations:
+{{ toYaml .Values.omApm.tolerations | indent 8 }}
+{{- end }}
+      containers:
+      - env:
+        - name: SERVER_MODE
+          value: production
+        - name: OMAPM_MONGODB_HOST
+          value: mongodb
+        - name: OMAPM_INFLUXDB_HOST
+          value: influxdb
+        - name: OMAPM_REDIS_HOST
+          value: redis
+        - name: OMAPM_RABBITMQ_HOST
+          value: rabbitmq
+        - name: TZ
+          value: {{ .Values.global.timezone }}
+        - name: JAVA_OPTS
+          value: -Xms1024m -Xms2048m -Djgroups.stack=tcp-dns -Dapm-dns-ping=ping.{{ .Release.Namespace }}.svc.cluster.local -Dapm-dns-ping-namespace={{ .Release.Namespace }}
+        - name: OMAPM_AGENT_ENABLE
+          value: "true"
+        - name: OMAPM_HOST
+          value: openmaru-apm
+        - name: OMAPM_PORT
+          value: "8080"
+        - name: OMAPM_INSTANCE_ID
+          value: openmaru-apm-${HOSTNAME:-:4}
+        - name: OMAPM_APPLICATION_NAME
+          value: openmaru-apm
+        - name: OMAPM_SERVER_BRAND_NAME
+          value: {{ .Values.omApm.brandName }}
+{{- if .Values.omApm.env }}
+{{ toYaml .Values.omApm.env | indent 8}}
+{{- end }}
+        image: {{ include "openmaru-apm.omApm.image" . }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /monitoring/api/check
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: openmaru-openmaru-apm
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /monitoring/api/check
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        resources:
+{{ toYaml .Values.omApm.resources | indent 10 }}
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /monitoring/api/check
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}

@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: {{- include "openmaru-apm.labels" . | nindent 4}}
+    app: redis
+  name: redis
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels: {{- include "openmaru-apm.labels" . | nindent 8}}
+        app: redis
+    spec:
+{{- if .Values.global.imagePullSecret.enable }}
+      imagePullSecrets: 
+      - name: {{ .Values.global.imagePullSecret.name }}
+{{- end }}
+{{- if .Values.redis.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.redis.nodeSelector | indent 8 }}
+{{- end }}
+{{- if .Values.redis.affinity }}
+      affinity:
+{{ toYaml .Values.redis.affinity | indent 8 }}
+{{- end }}
+{{- if .Values.redis.tolerations }}
+      tolerations:
+{{ toYaml .Values.redis.tolerations | indent 8 }}
+{{- end }}
+      containers:
+      - args:
+        - --requirepass
+        - opennaru12#$
+        image: {{ include "openmaru-apm.redis.image" . }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        env:
+        - name: TZ
+          value: {{ .Values.global.timezone }}
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: openmaru-redis
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources: 
+{{ toYaml .Values.redis.resources | indent 10 }}
+      restartPolicy: Always
+      securityContext: {}
