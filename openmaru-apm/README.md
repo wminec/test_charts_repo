@@ -16,6 +16,7 @@ Helm chart for OPENMARU APM
 | global.timezone                     | Timezone to use for all pods.                                                                                   | string | Asia/Seoul                          |
 | omApm.image.repository              | The Image Repository of the OPENMARU APM.                                                                       | string | om-helm/openmaru-apm                |
 | omApm.image.tag                     | The Image tag of the OPENMARU APM.                                                                              | string | 5.1.0-10.0.1                        |
+| omApm.brandName                     | The Brand Name to use for openmaru-apm.                                                                         | string | cocktail                            |
 | omApm.env                           | The additional environment variables to be set on the openmaru-apm pods.                                        | list   | []                                  |
 | omApm.nodeSelector                  | The node selector to use for openmaru-apm pods.                                                                 | object | {}                                  |
 | omApm.affinity                      | The affinity to use for openmaru-apm pods                                                                       | object | {}                                  |
