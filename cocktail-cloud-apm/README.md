@@ -1,5 +1,5 @@
-# OPENMARU APM
-Helm chart for OPENMARU APM
+# Cocktail Cloud APM
+Helm chart for Cocktail Cloud APM
 
 ## Values
 
