@@ -58,11 +58,11 @@ omApm:
     tag: 5.1.0-10.0.1
 
   ## The additional environment variables to be set on the openmaru-apm pods.
-  env: {}
-  # - name: OMAPM_APDEX_THRESHOLD
-  #   value: "3.0"
-  # - name: OMAPM_TRANSACTION_TRACE_THRESHOLD
-  #   value: 500
+  env: []
+#    - name: OMAPM_APDEX_THRESHOLD
+#      value: "3.0"
+#    - name: OMAPM_TRANSACTION_TRACE_THRESHOLD
+#      value: "500"
 
   ## The node selector to use for openmaru-apm pods.
   nodeSelector: {}

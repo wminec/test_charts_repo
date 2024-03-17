@@ -215,12 +215,13 @@
                     }]
                 },
                 "env": {
-                    "type": "object",
-                    "default": {},
+                    "type": "array",
+                    "default": [],
                     "title": "The env Schema",
-                    "required": [],
-                    "properties": {},
-                    "examples": [{}]
+                    "items": {},
+                    "examples": [
+                        []
+                    ]
                 },
                 "nodeSelector": {
                     "type": "object",
@@ -432,7 +433,7 @@
                     "repository": "om-helm/openmaru-apm",
                     "tag": "5.1.0-10.0.1"
                 },
-                "env": {},
+                "env": [],
                 "nodeSelector": {},
                 "affinity": {},
                 "tolerations": [],
@@ -952,7 +953,7 @@
                 "repository": "om-helm/openmaru-apm",
                 "tag": "5.1.0-10.0.1"
             },
-            "env": {},
+            "env": [],
             "nodeSelector": {},
             "affinity": {},
             "tolerations": [],
